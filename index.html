@@ -3,24 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Human Fly Crash Game</title>
+    <title>Dream Flight Game</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             keyframes: {
-              wobble: {
-                '0%, 100%': { transform: 'translateY(-4px) rotate(88deg)' },
-                '50%': { transform: 'translateY(4px) rotate(92deg)' },
-              },
-              'flap-left': {
-                '0%, 100%': { transform: 'rotate(0deg) scaleY(1)' },
-                '50%': { transform: 'rotate(-20deg) scaleY(0.9)' },
-              },
-              'flap-right': {
-                '0%, 100%': { transform: 'rotate(0deg) scaleY(1)' },
-                '50%': { transform: 'rotate(20deg) scaleY(0.9)' },
+              'gentle-float': {
+                '0%, 100%': { transform: 'translateY(-4px)' },
+                '50%': { transform: 'translateY(4px)' },
               },
               'float-up': {
                 '0%': { transform: 'translateY(0) scale(0.5)', opacity: '0' },
@@ -38,9 +30,7 @@
               }
             },
             animation: {
-              wobble: 'wobble 0.7s ease-in-out infinite',
-              'flap-left': 'flap-left 0.1s linear infinite',
-              'flap-right': 'flap-right 0.1s linear infinite',
+              'gentle-float': 'gentle-float 2.5s ease-in-out infinite',
               'float-up-1': 'float-up 12s linear infinite',
               'float-up-2': 'float-up 18s linear infinite 3s',
               'float-up-3': 'float-up 15s linear infinite 6s',

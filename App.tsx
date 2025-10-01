@@ -3,70 +3,68 @@ import { GameState } from './types';
 
 // --- ICONS & STATIC COMPONENTS ---
 
-const RightWingSVG = () => (
-    <path d="M12.5 7.5a5.5 5.5 0 015.5 5.5v0a.5.5 0 01-1 0 4.5 4.5 0 00-4.5-4.5.5.5 0 010-1z" />
-);
-
-const LeftWingSVG = () => (
-    <path d="M11.5 7.5a5.5 5.5 0 00-5.5 5.5v0a.5.5 0 001 0A4.5 4.5 0 0111.5 9a.5.5 0 000-1z" />
-);
-
-const FlyBodySVG = () => (
-    <>
-        <path d="M12 2a2 2 0 100 4 2 2 0 000-4z" />
-        <path d="M12 15l-3 4h6l-3-4z" />
-        <path fillRule="evenodd" d="M12.5 5.5a.5.5 0 00-1 0v11a.5.5 0 001 0v-11z" clipRule="evenodd" />
-    </>
-);
-
-const FlySVG: React.FC<{ className?: string; flying: boolean }> = ({ className, flying }) => {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
-            <g className={flying ? 'animate-flap-right' : ''} style={{ transformOrigin: '12.5px 8px' }}>
-                <RightWingSVG />
-            </g>
-            <g className={flying ? 'animate-flap-left' : ''} style={{ transformOrigin: '11.5px 8px' }}>
-                <LeftWingSVG />
-            </g>
-            <FlyBodySVG />
-        </svg>
-    );
-};
-
-const BalloonSVG: React.FC<{ className?: string }> = ({ className }) => (
-    <svg 
-        viewBox="0 0 50 80" 
-        className={className}
-    >
-        <g className="text-red-500/90 drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]" fill="currentColor">
-            <path d="M25,5 C12.8,5 5,14.7 5,26 C5,37.3 12.8,47 25,47 C37.2,47 45,37.3 45,26 C45,14.7 37.2,5 25,5 Z" />
-            <path d="M22,47 L28,47 L25,55 Z" />
-        </g>
-        <line x1="25" y1="55" x2="40" y2="70" stroke="currentColor" strokeWidth="2" className="text-slate-400" />
-    </svg>
-);
-
-const HumanFlyIcon: React.FC<{ crashed: boolean; flying: boolean }> = ({ crashed, flying }) => {
+const FlyingBoyIcon: React.FC<{ crashed: boolean; flying: boolean }> = ({ crashed, flying }) => {
     const isActivelyFlying = flying && !crashed;
-    const animationClass = isActivelyFlying ? 'animate-wobble' : '';
+    const animationClass = isActivelyFlying ? 'animate-gentle-float' : '';
+    const boyAndBalloonClasses = `transition-all duration-300 ease-out ${
+        crashed
+            ? 'text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,1)]'
+            : 'text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,1)]'
+    }`;
+
+    const face = crashed ? (
+        <>
+            {/* Surprised eyes (X X) and mouth (O) */}
+            <path d="M 56 79 L 58 81 M 58 79 L 56 81" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M 62 79 L 64 81 M 64 79 L 62 81" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+            <circle cx="60" cy="85" r="2" fill="#fff" />
+        </>
+    ) : (
+        <>
+            {/* Happy eyes and smile */}
+            <circle cx="57" cy="80" r="1" fill="white" />
+            <circle cx="63" cy="80" r="1" fill="white" />
+            <path d="M 58 84 Q 60 86 62 84" stroke="white" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+        </>
+    );
 
     return (
-        <div className="relative w-28 h-28 md:w-36 md:h-36">
-            {!crashed && flying && (
-                <div className="absolute top-0 left-0">
-                     <BalloonSVG className="w-12 h-16 md:w-16 md:h-20" />
-                </div>
-            )}
-            <div className="absolute bottom-0 right-0">
-                <FlySVG 
-                    flying={isActivelyFlying}
-                    className={`w-14 h-14 md:w-20 md:h-20 transition-all duration-300 ease-out transform ${animationClass} 
-                    ${crashed
-                        ? 'text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,1)] rotate-[135deg]'
-                        : 'text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,1)]'
-                    } ${!isActivelyFlying && !crashed ? 'rotate-90' : ''}`
-                } />
-            </div>
+        <div className={`relative w-28 h-36 md:w-32 md:h-40 transition-transform duration-500 ${crashed ? 'translate-y-10 rotate-[25deg]' : ''}`}>
+            <svg viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg" className={`w-full h-full ${animationClass}`}>
+                {!crashed && (
+                    <g>
+                        {/* Balloon */}
+                        <g className="text-red-500/90 drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]" fill="currentColor">
+                            <path d="M40 5C27.8 5 20 14.7 20 26c0 11.3 7.8 21 20 21s20-9.7 20-21C60 14.7 52.2 5 40 5z" />
+                            <path d="M37 47h6l-3 8z" />
+                        </g>
+                        {/* String */}
+                        <path d="M40 55 C 40 65, 45 70, 50 72" stroke="currentColor" strokeWidth="1.5" fill="none" className="text-slate-400" />
+                    </g>
+                )}
+
+                {/* Boy */}
+                <g className={boyAndBalloonClasses} fill="currentColor">
+                    {/* Head */}
+                    <circle cx="60" cy="80" r="8" />
+                    {face}
+                    {/* Body */}
+                    <rect x="57" y="88" width="6" height="18" rx="3" />
+                    {/* Legs */}
+                    <path d="M 58 106 L 56 118 M 62 106 L 64 118" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+                    {/* Arm + Hand */}
+                    <path d="M57 92 C54 90, 52 80, 50 72" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+                    <circle cx="50" cy="72" r="3" />
+                </g>
+
+                {crashed && ( // Popped balloon effect visual
+                    <g className="text-red-500/80" transform="translate(25, 10) scale(1.5)">
+                       <path d="M12 5 L17 10 L12 15 L7 10 Z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
+                       <path d="M5 12 L10 17 L15 12 L10 7" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
+                       <path d="M19 12 L14 17 L9 12 L14 7" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                )}
+            </svg>
         </div>
     );
 };
@@ -184,7 +182,7 @@ const App: React.FC = () => {
   const [multiplier, setMultiplier] = useState<number>(1.00);
   const [timeFlying, setTimeFlying] = useState<number>(0);
   const [balance, setBalance] = useState<number>(1000.00);
-  const [message, setMessage] = useState<string>("Place one or two bets and start flying!");
+  const [message, setMessage] = useState<string>("Place your bets for the dream flight!");
   const [flyPosition, setFlyPosition] = useState(0);
   const [history, setHistory] = useState<number[]>([]);
 
@@ -280,7 +278,7 @@ const App: React.FC = () => {
 
       if (currentMultiplier >= crashPointRef.current) {
         setGameState(GameState.CRASHED);
-        setMessage(`Crashed at ${crashPointRef.current.toFixed(2)}x!`);
+        setMessage(`Popped at ${crashPointRef.current.toFixed(2)}x!`);
         setMultiplier(crashPointRef.current);
         setHistory(prev => [crashPointRef.current, ...prev].slice(0, 20));
         stopGameLoop();
@@ -333,7 +331,7 @@ const App: React.FC = () => {
     <div className="flex flex-col items-center justify-between min-h-screen bg-gradient-to-b from-slate-900 via-gray-900 to-black p-4 text-sky-100 selection:bg-cyan-500/30">
         
       <header className="w-full max-w-4xl flex justify-between items-center p-4 bg-black/20 rounded-lg backdrop-blur-sm">
-        <h1 className="text-xl md:text-3xl font-bold text-sky-300 tracking-wider">HUMAN FLY</h1>
+        <h1 className="text-xl md:text-3xl font-bold text-sky-300 tracking-wider">DREAM FLIGHT</h1>
         <div className="flex items-center gap-4">
             <div className="text-right">
             <span className="text-sm text-slate-400 block">Balance</span>
@@ -379,7 +377,6 @@ const App: React.FC = () => {
                 stroke="url(#line-gradient)" 
                 strokeWidth="0.5" 
                 fill="none" 
-                strokeDasharray="2 3"
             />
         </svg>
 
@@ -400,7 +397,7 @@ const App: React.FC = () => {
                 transform: 'translate(-50%, 50%)' 
             }}
         >
-            <HumanFlyIcon crashed={isCrashed} flying={isFlying} />
+            <FlyingBoyIcon crashed={isCrashed} flying={isFlying} />
         </div>
       </main>
 
@@ -440,7 +437,7 @@ const App: React.FC = () => {
                 )}
                 {isCrashed && (
                     <button disabled className="w-full text-xl font-bold py-3 px-6 rounded-lg bg-red-800 opacity-70 cursor-not-allowed">
-                        CRASHED
+                        POPPED
                     </button>
                 )}
             </div>
