@@ -64,7 +64,7 @@ const HumanFlyIcon: React.FC<{ crashed: boolean; flying: boolean }> = ({ crashed
                     ${crashed
                         ? 'text-red-500 drop-shadow-[0_0_12px_rgba(239,68,68,1)] rotate-[135deg]'
                         : 'text-sky-300 drop-shadow-[0_0_12px_rgba(56,189,248,1)]'
-                    } ${!isActivelyFlying && !crashed ? 'rotate-45' : ''}`
+                    } ${!isActivelyFlying && !crashed ? 'rotate-90' : ''}`
                 } />
             </div>
         </div>
@@ -320,12 +320,14 @@ const App: React.FC = () => {
 
   const canStart = isIdle && (bet1 > 0 || bet2 > 0);
 
-  const startOffset = 5;
-  const flightPathEnd = 90;
-  const travelDistance = flightPathEnd - startOffset;
-  const progressRatio = travelDistance / flightPathEnd;
-  const currentTop = startOffset + flyPosition * progressRatio;
-  const currentLeft = startOffset + flyPosition * progressRatio;
+  // Flight path calculation
+  const currentLeft = 5 + flyPosition; // flyPosition is 0-90, maps to 5% -> 95%
+  const progress = flyPosition / 90; // 0 -> 1
+  const angle = progress * Math.PI; // 0 -> PI
+  const waveHeight = Math.sin(angle); // 0 -> 1 -> 0
+  const arcMaxHeight = 40; // The peak of the arc is 40% up the container
+  const baseBottom = 10; // Starts and ends 10% from the bottom
+  const currentBottom = baseBottom + waveHeight * arcMaxHeight;
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-gradient-to-b from-slate-900 via-gray-900 to-black p-4 text-sky-100 selection:bg-cyan-500/30">
@@ -363,10 +365,23 @@ const App: React.FC = () => {
       <main className={`w-full max-w-xl aspect-square bg-black/30 rounded-2xl overflow-hidden relative border border-sky-500/20 flex items-center justify-center transition-all duration-500 ${isCrashed ? 'animate-red-flash' : ''}`}>
         <BackgroundParticles />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent"></div>
-        <div 
-          className="absolute top-1/2 left-1/2 h-[142%] w-0.5 bg-gradient-to-t from-sky-500/50 via-sky-500/20 to-transparent"
-          style={{ transform: 'translate(-50%, -50%) rotate(135deg)' }}
-        ></div>
+        
+        <svg preserveAspectRatio="none" viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none opacity-50">
+            <defs>
+                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(56, 189, 248, 1)" />
+                    <stop offset="50%" stopColor="rgba(56, 189, 248, 0.5)" />
+                    <stop offset="100%" stopColor="rgba(56, 189, 248, 0)" />
+                </linearGradient>
+            </defs>
+            <path 
+                d="M 5 90 Q 50 10 95 90" 
+                stroke="url(#line-gradient)" 
+                strokeWidth="0.5" 
+                fill="none" 
+                strokeDasharray="2 3"
+            />
+        </svg>
 
         <div className="z-10 text-center">
             <h2 className={`font-mono transition-colors duration-300 ${isCrashed ? 'text-red-400' : 'text-white'} text-6xl md:text-8xl font-bold tracking-tighter animate-pulse-glow`}>
@@ -380,9 +395,9 @@ const App: React.FC = () => {
         <div 
             className="absolute transition-all duration-200 ease-linear" 
             style={{ 
-                top: `${currentTop}%`,
+                bottom: `${currentBottom}%`,
                 left: `${currentLeft}%`,
-                transform: 'translate(-50%, -50%)' 
+                transform: 'translate(-50%, 50%)' 
             }}
         >
             <HumanFlyIcon crashed={isCrashed} flying={isFlying} />
