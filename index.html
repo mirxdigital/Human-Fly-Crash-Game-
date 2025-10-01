@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Human Fly Crash Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            keyframes: {
+              wobble: {
+                '0%, 100%': { transform: 'translateY(-6px) rotate(42deg)' },
+                '50%': { transform: 'translateY(6px) rotate(48deg)' },
+              },
+              'flap-left': {
+                '0%, 100%': { transform: 'rotate(0deg) scaleY(1)' },
+                '50%': { transform: 'rotate(-20deg) scaleY(0.9)' },
+              },
+              'flap-right': {
+                '0%, 100%': { transform: 'rotate(0deg) scaleY(1)' },
+                '50%': { transform: 'rotate(20deg) scaleY(0.9)' },
+              },
+              'float-up': {
+                '0%': { transform: 'translateY(0) scale(0.5)', opacity: '0' },
+                '10%': { opacity: '0.7' },
+                '90%': { opacity: '0.7' },
+                '100%': { transform: 'translateY(-100vh) scale(1.5)', opacity: '0' },
+              },
+              'pulse-glow': {
+                '0%, 100%': { textShadow: '0 0 15px rgba(56, 189, 248, 0.5)', color: '#e0f2fe' },
+                '50%': { textShadow: '0 0 30px rgba(56, 189, 248, 1)', color: '#fff' },
+              },
+              'red-flash': {
+                '0%, 100%': { boxShadow: 'inset 0 0 0 0 rgba(239, 68, 68, 0)' },
+                '50%': { boxShadow: 'inset 0 0 100px 50px rgba(239, 68, 68, 0.5)' },
+              }
+            },
+            animation: {
+              wobble: 'wobble 0.7s ease-in-out infinite',
+              'flap-left': 'flap-left 0.1s linear infinite',
+              'flap-right': 'flap-right 0.1s linear infinite',
+              'float-up-1': 'float-up 12s linear infinite',
+              'float-up-2': 'float-up 18s linear infinite 3s',
+              'float-up-3': 'float-up 15s linear infinite 6s',
+              'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+              'red-flash': 'red-flash 0.5s ease-out',
+            },
+          },
+        },
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/"
+  }
+}
+</script>
+</head>
+  <body class="bg-slate-900 text-white font-sans antialiased">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
